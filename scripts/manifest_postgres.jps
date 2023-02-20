@@ -95,15 +95,15 @@ actions:
               var passwdCmd = "jem passwd set -p ${globals.password}",
               resp = jelastic.env.control.ExecCmdByGroup('${@i}', session, "sqldb", toJSON([{ "command": passwdCmd, "params": "" }]), false, false, "root");
               return resp;
-    - script: |-
-        var regions = '${settings.pgpool2Regions}'.split(','), passCmd = "pg_md5 --md5auth --username=webadmin " + "${globals.password}";
-        for (var cluster = 1, n = regions.length + 1; cluster < n; cluster++) {
-            var resp = jelastic.env.control.GetEnvInfo('${settings.mainEnvName}-pgpool2-' + cluster, session);
-            if (resp.result == 0) {
-                var resp = jelastic.env.control.ExecCmdByGroup('${settings.mainEnvName}-pgpool2-' + cluster, session, 'extra', toJSON([{ "command": passCmd, "params": "" }]), false, false, "root");
-                if (resp.result != 0) return resp;
-            }
-        } 
+    #- script: |-
+    #    var regions = '${settings.pgpool2Regions}'.split(','), passCmd = "pg_md5 --md5auth --username=webadmin " + "${globals.password}";
+    #    for (var cluster = 1, n = regions.length + 1; cluster < n; cluster++) {
+    #        var resp = jelastic.env.control.GetEnvInfo('${settings.mainEnvName}-pgpool2-' + cluster, session);
+    #        if (resp.result == 0) {
+    #            var resp = jelastic.env.control.ExecCmdByGroup('${settings.mainEnvName}-pgpool2-' + cluster, session, 'extra', toJSON([{ "command": passCmd, "params": "" }]), false, false, "root");
+    #            if (resp.result != 0) return resp;
+    #        }
+    #    } 
 
   deleteEnvFromMultiregionalCluster:
     - cmd[${nodes.sqldb.master.id}]: jcm getPswd
